@@ -1,5 +1,0 @@
-C:\Users\macie\OneDrive\Pulpit\praca-\src\test\kotlin\net\maciejkasik\ApiServerTest.kt
-C:\Users\macie\OneDrive\Pulpit\praca-\src\test\kotlin\net\maciejkasik\FilterTest.kt
-C:\Users\macie\OneDrive\Pulpit\praca-\src\test\kotlin\net\maciejkasik\PostTest.kt
-C:\Users\macie\OneDrive\Pulpit\praca-\src\test\kotlin\net\maciejkasik\FileUtilsTest.kt
-C:\Users\macie\OneDrive\Pulpit\praca-\src\test\kotlin\net\maciejkasik\RefreshOperationsTest.kt
