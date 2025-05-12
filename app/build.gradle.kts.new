@@ -1,0 +1,160 @@
+lugins {
+    kotlin("jvm") version "1.9.0"
+    kotlin("plugin.serialization") version "1.9.0"
+    application
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set(11)
+}
+
+group = "net.maciejkasik"
+version = "1.0-SNAPSHOT"
+
+val ktor_version = "2.3.1"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    
+    implementation("io.ktor:ktor-server-core:$ktor_version")
+    implementation("io.ktor:ktor-server-netty:$ktor_version")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("io.ktor:ktor-server-cors:$ktor_version")
+    implementation("io.ktor:ktor-server-status-pages:$ktor_version")
+    
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+    
+    implementation("ch.qos.logback:logback-classic:1.4.7")
+    
+    testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
+    testImplementation("io.mockk:mockk:1.13.5")
+    testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
+    testImplementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    testImplementation("io.ktor:ktor-client-mock:$ktor_version")
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+kotlin {
+    jvmToolchain(11)
+}
+
+application {
+    mainClass.set("net.maciejkasik.MainKt")
+    
+    applicationDefaultJvmArgs = listOf(
+        "-Dapp.env=${project.findProperty("env") ?: "dev"}",
+        "-Dapp.mode=${project.findProperty("mode") ?: "cli"}"
+    )
+}
+
+tasks.jar {
+    manifest {
+        attributes(
+            mapOf(
+                "Main-Class" to "net.maciejkasik.MainKt",
+                "Implementation-Title" to project.name,
+                "Implementation-Version" to project.version
+            )
+        )
+    }
+    
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+    
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.wrapper {
+    gradleVersion = "8.8"
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+tasks.named<JavaExec>("run") {
+    val env = project.findProperty("env") as String? ?: "dev"
+    val mode = project.findProperty("mode") as String? ?: "cli"
+    
+    systemProperty("app.env", env)
+    systemProperty("app.mode", mode)
+}
+
+tasks.register<JavaExec>("runCliCmd") {
+    group = "application"
+    description = "Runs the application in CLI mode with command arguments"
+    mainClass.set("net.maciejkasik.CliAppKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    
+    args = (project.findProperty("appArgs") as String? ?: "").split(" ").filter { it.isNotEmpty() }
+}
+
+tasks.register<JavaExec>("runDevCli") {
+    group = "application"
+    description = "Runs the application in development environment (CLI mode)"
+    mainClass.set("net.maciejkasik.MainKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    systemProperty("app.env", "dev")
+    systemProperty("app.mode", "cli")
+}
+
+tasks.register<JavaExec>("runStagingCli") {
+    group = "application"
+    description = "Runs the application in staging environment (CLI mode)"
+    mainClass.set("net.maciejkasik.MainKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    systemProperty("app.env", "staging")
+    systemProperty("app.mode", "cli")
+}
+
+tasks.register<JavaExec>("runProdCli") {
+    group = "application"
+    description = "Runs the application in production environment (CLI mode)"
+    mainClass.set("net.maciejkasik.MainKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    systemProperty("app.env", "prod")
+    systemProperty("app.mode", "cli")
+}
+
+tasks.register<JavaExec>("runDevApi") {
+    group = "application"
+    description = "Runs the application in development environment (API mode)"
+    mainClass.set("net.maciejkasik.MainKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    systemProperty("app.env", "dev")
+    systemProperty("app.mode", "api")
+}
+
+tasks.register<JavaExec>("runStagingApi") {
+    group = "application"
+    description = "Runs the application in staging environment (API mode)"
+    mainClass.set("net.maciejkasik.MainKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    systemProperty("app.env", "staging")
+    systemProperty("app.mode", "api")
+}
+
+tasks.register<JavaExec>("runProdApi") {
+    group = "application"
+    description = "Runs the application in production environment (API mode)"
+    mainClass.set("net.maciejkasik.MainKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    systemProperty("app.env", "prod")
+    systemProperty("app.mode", "api")
+}
