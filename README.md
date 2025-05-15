@@ -68,19 +68,6 @@ Ten projekt to aplikacja fullstack składająca się z backendu napisanego w Kot
    npm run dev
    ```
 
-## Testy
-
-Aby uruchomić testy backendu:
-```bash
-cd app
-./gradlew test
-```
-
-Aby uruchomić testy frontendu:
-```bash
-cd frontend-react
-npm test
-```
 
 ## Deployment
 
