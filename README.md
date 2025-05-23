@@ -67,12 +67,3 @@ Ten projekt to aplikacja fullstack składająca się z backendu napisanego w Kot
    npm run dev
    ```
 
-
-## Deployment
-
-Projekt zawiera skrypty Ansible ułatwiające deployment na serwery produkcyjne:
-
-```bash
-cd ansible
-ansible-playbook -i inventory.ini deploy.yml
-```
