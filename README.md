@@ -1,4 +1,4 @@
-# Projekt Fullstack: Kotlin i React
+# jsonplaceholder-downloader
 
 ## Opis projektu
 Ten projekt to aplikacja fullstack składająca się z backendu napisanego w Kotlinie oraz frontendu zbudowanego przy użyciu React. Aplikacja umożliwia przeglądanie i zarządzanie postami z zewnętrznego API.
@@ -21,7 +21,6 @@ Ten projekt to aplikacja fullstack składająca się z backendu napisanego w Kot
 1. Sklonuj repozytorium:
    ```bash
    git clone [adres-repozytorium]
-   cd praca-
    ```
 
 2. Uruchom aplikację za pomocą Docker Compose:
